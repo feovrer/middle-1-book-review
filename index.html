@@ -70,6 +70,16 @@
   .badge.ok{background:var(--green);color:#fff}
   .badge.over{background:var(--orange);color:#fff}
   .tip{font-size:14px;color:var(--soft);margin:4px 0 8px}
+  .howto{background:#ffffffcc;border-radius:16px;padding:10px 14px;margin:6px 0 10px;font-size:15px}
+  .howto summary{font-family:'Jua';cursor:pointer;color:var(--accent2);font-size:16px}
+  .howto ol{margin:8px 0 10px;padding-left:22px}
+  .howto li{margin:3px 0}
+  .ex-title{font-family:'Jua';color:var(--accent);margin:4px 0 6px}
+  .ex{display:flex;gap:10px;align-items:flex-start;background:var(--lemon);border-radius:12px;padding:8px 12px;margin:6px 0}
+  .ex-n{font-family:'Jua';background:#fff;border-radius:999px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .ex-en{font-family:'Fredoka',sans-serif;font-weight:500;color:var(--ink)}
+  .ex-ko{font-size:13px;color:var(--soft)}
+  .ex-warn{font-size:13px;color:#d9480f;margin-top:6px}
 
   /* 챗봇 */
   .chat{position:sticky;top:14px;display:flex;flex-direction:column;height:min(78vh,680px);padding:0;overflow:hidden}
@@ -128,7 +138,7 @@
 <body>
 <div class="wrap">
   <header>
-    <h1 class="logo">Learn from <span class="ko">줄거리</span> 📚</h1>
+    <h1 style="margin:0"><span class="logo">Learn from <span class="ko">줄거리</span></span> <span style="font-size:clamp(30px,5vw,48px)">📚</span></h1>
     <div class="sub">책 속 이야기에서 배우는 나만의 독서 감상문</div>
   </header>
 
@@ -230,10 +240,27 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbz7c-hYfgS2KYyRgGk5s9_j
 
 const SECTIONS = [
   {key:'summary', name:'줄거리 요약', emoji:'📖', n:3, tip:'처음 → 중간 → 끝을 한 문장씩! 누가, 무엇을, 어떻게 했나요?',
+   how:['<b>처음</b>: 주인공이 누구이고, 이야기가 어떻게 시작되는지 쓰기',
+        '<b>중간</b>: 가장 중요한 사건(문제가 생긴 장면) 쓰기',
+        '<b>끝</b>: 이야기가 어떻게 끝나는지 쓰기',
+        '순서 표현 <b>At first / Then / In the end</b>로 문장을 시작하면 쉬워요'],
+   ex:[{en:'At first, the hare laughed at the slow tortoise, so they had a race.', ko:'처음에 토끼는 느린 거북이를 비웃었고, 그래서 둘은 경주를 했다.'},
+       {en:'Then, the hare was far ahead, so he took a nap under a tree.', ko:'그 다음, 토끼는 한참 앞서 있어서 나무 아래에서 낮잠을 잤다.'},
+       {en:'In the end, the tortoise kept walking and won the race.', ko:'결국 거북이는 계속 걸어서 경주에서 이겼다.'}],
    chips:['어떻게 시작하면 좋을까?','중요한 사건을 고르기 어려워요','이야기 순서 표현 알려줘']},
   {key:'opinion', name:'주인공에 대한 나의 의견', emoji:'💭', n:2, tip:'주인공의 행동에 대한 내 생각 1문장 + 그렇게 생각한 이유 1문장',
+   how:['<b>1문장</b>: 주인공이 어떤 사람(동물)인지 내 생각 쓰기 — <b>I think ___ is ___.</b>',
+        '<b>2문장</b>: 그렇게 생각한 이유를 이야기 속 행동으로 쓰기 — <b>because ___ / That is why ___.</b>',
+        '성격 단어 예: brave, kind, proud, lazy, honest, smart, selfish'],
+   ex:[{en:'I think the hare was too proud.', ko:'나는 토끼가 너무 자만했다고 생각한다.'},
+       {en:'He looked down on the tortoise, and that is why he lost the race.', ko:'토끼는 거북이를 얕보았고, 그래서 경주에서 졌다.'}],
    chips:['주인공을 어떻게 평가하지?','의견을 말하는 표현 알려줘','이유를 어떻게 쓰지?']},
   {key:'lesson', name:'이야기의 교훈', emoji:'🌱', n:2, tip:'이야기에서 배운 점 1문장 + 내 생활에 적용할 점 1문장',
+   how:['<b>1문장</b>: 이 이야기에서 배운 점 쓰기 — <b>I learned that ___.</b>',
+        '<b>2문장</b>: 앞으로 내 생활에서 어떻게 할지 쓰기 — <b>From now on, I will ___.</b>',
+        '배운 점과 내 생활이 서로 이어지게 써요'],
+   ex:[{en:'I learned that slow and steady wins the race.', ko:'나는 천천히 꾸준히 하는 사람이 이긴다는 것을 배웠다.'},
+       {en:'From now on, I will study English a little every day.', ko:'앞으로 나는 매일 조금씩 영어 공부를 할 것이다.'}],
    chips:['교훈이 잘 안 떠올라요','배운 점을 말하는 표현 알려줘','내 생활과 어떻게 연결하지?']}
 ];
 let info = {}, drafts = {summary:'',opinion:'',lesson:''}, current = 'summary';
@@ -307,6 +334,13 @@ function secHtml(s, suffix){
   return `<div class="sec s-${s.key}" id="sec_${s.key}${suffix}">
     <div class="sec-head"><h3>${s.emoji} ${s.name}</h3><span class="badge" id="badge_${s.key}${suffix}">0 / ${s.n}문장</span></div>
     <div class="tip">${s.tip}</div>
+    ${suffix ? '' : `<details class="howto" open>
+      <summary>✏️ 이렇게 써요 · 💡 예시 보기</summary>
+      <ol>${s.how.map(h => `<li>${h}</li>`).join('')}</ol>
+      <div class="ex-title">💡 예시 — 『The Tortoise and the Hare (토끼와 거북이)』</div>
+      ${s.ex.map((e,i) => `<div class="ex"><span class="ex-n">${i+1}</span><div><div class="ex-en">${e.en}</div><div class="ex-ko">${e.ko}</div></div></div>`).join('')}
+      <div class="ex-warn">⚠️ 예시를 그대로 베끼지 말고, <b>내가 읽은 책</b>으로 바꿔서 써요!</div>
+    </details>`}
     <textarea id="ta_${s.key}${suffix}" data-key="${s.key}" placeholder="${s.n}문장으로 써 보세요"></textarea>
   </div>`;
 }
