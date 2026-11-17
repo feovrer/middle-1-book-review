@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learn from 줄거리</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ffd6e0; --peach:#ffe5cc; --mint:#d4f5e9; --sky:#d6e9ff; --lilac:#e8dcff; --lemon:#fff6c7;
+    --ink:#4a3f5c; --soft:#7b6f8f; --accent:#ff7aa2; --accent2:#7c9cff; --green:#3fbf8f; --orange:#ff9f43;
+    --card:#ffffffd9; --radius:22px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; color:var(--ink);
+    font-family:'Gowun Dodum',sans-serif; font-size:16px; line-height:1.6;
+    background:linear-gradient(135deg,var(--pink) 0%,var(--lemon) 30%,var(--mint) 60%,var(--sky) 85%,var(--lilac) 100%);
+    background-attachment:fixed;
+  }
+  h1,h2,h3,.btn,.badge,.step-pill,.chip{font-family:'Jua',sans-serif;font-weight:400}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 16px 60px}
+  header{text-align:center;margin:8px 0 22px}
+  .logo{font-family:'Fredoka','Jua',sans-serif;font-weight:700;font-size:clamp(34px,6vw,56px);letter-spacing:.5px;margin:0;
+    background:linear-gradient(90deg,#ff6f9c,#ff9f43,#7c9cff,#b07cff);-webkit-background-clip:text;background-clip:text;color:transparent;
+    display:inline-block;animation:bob 3s ease-in-out infinite}
+  .logo .ko{font-family:'Jua',sans-serif}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-6px) rotate(1deg)}}
+  .sub{color:var(--soft);margin-top:4px}
+  .card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:0 10px 30px #b9a7d633;backdrop-filter:blur(6px);border:2px solid #fff}
+  .hidden{display:none!important}
+  .btn{border:none;border-radius:999px;padding:12px 22px;font-size:17px;cursor:pointer;color:#fff;background:var(--accent);
+    box-shadow:0 4px 0 #e05c86;transition:transform .1s, box-shadow .1s}
+  .btn:hover{transform:translateY(-2px)} .btn:active{transform:translateY(2px);box-shadow:0 1px 0 #e05c86}
+  .btn.blue{background:var(--accent2);box-shadow:0 4px 0 #5a78db}
+  .btn.green{background:var(--green);box-shadow:0 4px 0 #2a9a70}
+  .btn.ghost{background:#fff;color:var(--ink);box-shadow:0 4px 0 #ddd3ee}
+  .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+  input,textarea{width:100%;border:2px solid #eadff7;border-radius:16px;padding:12px 14px;font-family:'Gowun Dodum',sans-serif;font-size:16px;color:var(--ink);background:#fff;outline:none;transition:border .2s}
+  input:focus,textarea:focus{border-color:var(--accent2)}
+  textarea{resize:vertical;min-height:110px;line-height:1.7}
+  label{font-family:'Jua';display:block;margin:12px 0 6px}
+
+  /* 시작 화면 */
+  .start{max-width:560px;margin:0 auto}
+  .guide{display:grid;gap:10px;margin:16px 0}
+  .guide div{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:16px;font-family:'Jua'}
+  .guide .n{margin-left:auto;background:#fff;border-radius:999px;padding:2px 12px;font-size:14px}
+  .g1{background:var(--peach)} .g2{background:var(--sky)} .g3{background:var(--mint)}
+  .flow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;font-family:'Jua';color:var(--soft);font-size:14px;margin-bottom:6px}
+  .flow span{background:#fff;border-radius:999px;padding:4px 12px}
+
+  /* 단계 표시 */
+  .steps{display:flex;gap:10px;justify-content:center;margin-bottom:18px;flex-wrap:wrap}
+  .step-pill{padding:8px 18px;border-radius:999px;background:#ffffff99;color:var(--soft)}
+  .step-pill.on{background:#fff;color:var(--accent);box-shadow:0 4px 12px #ff7aa233}
+  .step-pill.done{background:var(--mint);color:#2a9a70}
+  .who{text-align:center;color:var(--soft);margin:-8px 0 16px;font-size:15px}
+
+  /* STEP 1 레이아웃 */
+  .grid{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;align-items:start}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  .sec{border-radius:20px;padding:16px;margin-bottom:14px;border:3px solid transparent;transition:border .2s,transform .2s}
+  .sec.active{border-color:#fff;transform:scale(1.01);box-shadow:0 8px 20px #b9a7d644}
+  .sec.s-summary{background:var(--peach)} .sec.s-opinion{background:var(--sky)} .sec.s-lesson{background:var(--mint)}
+  .sec-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .sec-head h3{margin:0;font-size:20px}
+  .badge{margin-left:auto;padding:3px 12px;border-radius:999px;background:#fff;font-size:14px;color:var(--soft)}
+  .badge.ok{background:var(--green);color:#fff}
+  .badge.over{background:var(--orange);color:#fff}
+  .tip{font-size:14px;color:var(--soft);margin:4px 0 8px}
+
+  /* 챗봇 */
+  .chat{position:sticky;top:14px;display:flex;flex-direction:column;height:min(78vh,680px);padding:0;overflow:hidden}
+  .chat-top{padding:14px 18px;background:linear-gradient(90deg,var(--lilac),var(--sky));font-family:'Jua'}
+  .chat-top small{display:block;font-family:'Gowun Dodum';color:var(--soft)}
+  .msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+  .msg{max-width:88%;padding:10px 14px;border-radius:18px;white-space:pre-wrap;word-break:break-word;animation:pop .25s ease}
+  @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+  .msg.bot{background:var(--lemon);border-bottom-left-radius:4px;align-self:flex-start}
+  .msg.me{background:var(--pink);border-bottom-right-radius:4px;align-self:flex-end}
+  .msg.wait{color:var(--soft)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 8px}
+  .chip{border:2px solid #eadff7;background:#fff;border-radius:999px;padding:4px 12px;font-size:14px;cursor:pointer;color:var(--ink)}
+  .chip:hover{background:var(--lilac)}
+  .chat-in{display:flex;gap:8px;padding:12px;border-top:2px dashed #eadff7}
+  .chat-in input{flex:1}
+  .chat-in .btn{padding:10px 16px}
+
+  .actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px}
+  .saved{color:var(--soft);font-size:14px;align-self:center;margin-right:auto}
+
+  /* STEP 2 */
+  .gitem{background:#fff;border-radius:16px;padding:12px 14px;margin:10px 0;border-left:6px solid var(--orange)}
+  .gitem .where{font-family:'Jua';font-size:14px;color:var(--soft)}
+  .gitem .orig{background:#ffe3e3;border-radius:8px;padding:1px 8px;text-decoration:underline wavy #ff6b6b}
+  .gitem .sug{background:#dcfce7;border-radius:8px;padding:1px 8px}
+  .reveal{font-size:13px;padding:4px 12px;margin-top:6px}
+  .overall{background:var(--lemon);border-radius:16px;padding:12px 16px;margin-bottom:8px}
+  .allgood{background:var(--mint);border-radius:16px;padding:16px;text-align:center;font-family:'Jua';font-size:18px}
+
+  /* 완성 */
+  .final{background:#fff;border-radius:18px;padding:26px;max-width:760px;margin:0 auto}
+  .final h3{margin:18px 0 6px;color:var(--accent)}
+  .final p{font-size:19px;line-height:1.9;margin:0}
+  .paper-note{text-align:center;font-family:'Jua';font-size:20px;margin-bottom:12px}
+
+  /* 교사용 */
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;font-size:15px}
+  th{background:var(--lilac);font-family:'Jua';font-weight:400;padding:10px}
+  td{padding:10px;border-top:1px solid #f0e8fa;text-align:center}
+  tr.row:hover{background:var(--lemon);cursor:pointer}
+  .tl{border-left:4px solid var(--lilac);margin:10px 0 10px 8px;padding:6px 0 6px 16px}
+  .tl .t{font-size:13px;color:var(--soft)}
+  .tl .k{font-family:'Jua';display:inline-block;padding:1px 10px;border-radius:999px;background:var(--sky);margin-right:6px;font-size:14px}
+  .tl pre{white-space:pre-wrap;font-family:'Gowun Dodum';background:#faf7ff;border-radius:10px;padding:8px 10px;margin:6px 0}
+  .tl pre.ai{background:#fffbe8}
+  footer{text-align:center;margin-top:30px}
+  footer a{color:var(--soft);font-size:13px;cursor:pointer;text-decoration:underline}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:999px;font-family:'Jua';z-index:99;transition:opacity .3s}
+  @media print{
+    body{background:#fff} header,.steps,.who,.actions,footer,.paper-note,.noprint{display:none!important}
+    .card{box-shadow:none;border:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 class="logo">Learn from <span class="ko">줄거리</span> 📚</h1>
+    <div class="sub">책 속 이야기에서 배우는 나만의 독서 감상문</div>
+  </header>
+
+  <!-- ===== 시작 화면 ===== -->
+  <section id="vStart" class="card start">
+    <div class="flow"><span>STEP 1 ✏️ 한 부분씩 쓰기</span><span>STEP 2 🔍 문법 점검</span><span>📝 종이에 옮겨 쓰기</span></div>
+    <h2 style="text-align:center;margin:6px 0">오늘 쓸 감상문은 이렇게 구성해요!</h2>
+    <div class="guide">
+      <div class="g1">📖 줄거리 요약 <span class="n">3문장</span></div>
+      <div class="g2">💭 주인공에 대한 나의 의견 <span class="n">2문장</span></div>
+      <div class="g3">🌱 이야기의 교훈 <span class="n">2문장</span></div>
+    </div>
+    <label for="inId">학번</label><input id="inId" placeholder="예: 20101" autocomplete="off">
+    <label for="inName">이름</label><input id="inName" placeholder="이름" autocomplete="off">
+    <label for="inBook">읽은 책 제목</label><input id="inBook" placeholder="예: Charlotte's Web" autocomplete="off">
+    <div style="text-align:center;margin-top:20px"><button class="btn" id="btnStart">시작하기 🚀</button></div>
+  </section>
+
+  <!-- ===== 작성 화면 ===== -->
+  <section id="vMain" class="hidden">
+    <div class="steps">
+      <div class="step-pill" id="pill1">STEP 1 ✏️ 쓰기</div>
+      <div class="step-pill" id="pill2">STEP 2 🔍 문법 점검</div>
+      <div class="step-pill" id="pill3">📝 종이에 옮겨 쓰기</div>
+    </div>
+    <div class="who" id="who"></div>
+
+    <!-- STEP 1 -->
+    <div id="step1" class="grid">
+      <div class="card">
+        <div id="secs"></div>
+        <div class="actions">
+          <span class="saved" id="saved1"></span>
+          <button class="btn ghost" id="btnSave1">💾 임시 저장</button>
+          <button class="btn blue" id="btnTo2">STEP 2로 가기 →</button>
+        </div>
+      </div>
+      <div class="card chat">
+        <div class="chat-top">🤖 북버디에게 물어보기<small id="chatFor">지금 쓰는 부분: 줄거리 요약</small></div>
+        <div class="msgs" id="msgs"></div>
+        <div class="chips" id="chips"></div>
+        <div class="chat-in">
+          <input id="chatIn" placeholder="궁금한 걸 물어봐요 (대신 써 주지는 않아요!)" autocomplete="off">
+          <button class="btn" id="btnSend">보내기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="step2" class="grid hidden">
+      <div class="card">
+        <div id="secs2"></div>
+        <div class="actions">
+          <span class="saved" id="saved2"></span>
+          <button class="btn ghost" id="btnBack1">← STEP 1</button>
+          <button class="btn blue" id="btnCheck">🔍 문법 점검하기</button>
+          <button class="btn green" id="btnFinal">완성! 🎉</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">🔍 문법 점검 결과</h3>
+        <div class="tip">힌트를 보고 왼쪽 글을 <b>직접</b> 고친 뒤 다시 점검해 보세요. 그래도 모르겠으면 ‘고친 표현 보기’를 눌러요.</div>
+        <div id="gResult"><div class="tip">아직 점검하지 않았어요. 🔍 버튼을 눌러 보세요!</div></div>
+      </div>
+    </div>
+
+    <!-- 완성 -->
+    <div id="step3" class="hidden">
+      <div class="card">
+        <div class="paper-note">🎉 완성! 이제 이 글을 <u>활동지(종이)</u>에 또박또박 옮겨 써서 제출하세요.</div>
+        <div class="final" id="finalBox"></div>
+        <div class="actions" style="justify-content:center;margin-top:16px">
+          <button class="btn ghost" id="btnBack2">← 다시 고치기</button>
+          <button class="btn blue" onclick="window.print()">🖨️ 인쇄하기</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 교사용 ===== -->
+  <section id="vTeacher" class="hidden">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0">👩‍🏫 교사용 — 학생별 작성 과정</h2>
+        <button class="btn ghost" id="btnReload" style="margin-left:auto">🔄 새로고침</button>
+        <button class="btn ghost" id="btnTOut">나가기</button>
+      </div>
+      <div id="tList" style="margin-top:16px"></div>
+      <div id="tDetail" style="margin-top:18px"></div>
+    </div>
+  </section>
+
+  <footer><a id="lnkTeacher">교사용</a></footer>
+</div>
+
+<script>
+/* ★ Apps Script 웹앱 배포 후 받은 주소(…/exec)를 여기에 붙여넣으세요 ★ */
+const API_URL = 'https://script.google.com/macros/s/AKfycbz7c-hYfgS2KYyRgGk5s9_j_0KdNGnwkty2d-kqLnhzjvrFRAsSKDw7MmzR8dBpa3jR/exec';
+
+const SECTIONS = [
+  {key:'summary', name:'줄거리 요약', emoji:'📖', n:3, tip:'처음 → 중간 → 끝을 한 문장씩! 누가, 무엇을, 어떻게 했나요?',
+   chips:['어떻게 시작하면 좋을까?','중요한 사건을 고르기 어려워요','이야기 순서 표현 알려줘']},
+  {key:'opinion', name:'주인공에 대한 나의 의견', emoji:'💭', n:2, tip:'주인공의 행동에 대한 내 생각 1문장 + 그렇게 생각한 이유 1문장',
+   chips:['주인공을 어떻게 평가하지?','의견을 말하는 표현 알려줘','이유를 어떻게 쓰지?']},
+  {key:'lesson', name:'이야기의 교훈', emoji:'🌱', n:2, tip:'이야기에서 배운 점 1문장 + 내 생활에 적용할 점 1문장',
+   chips:['교훈이 잘 안 떠올라요','배운 점을 말하는 표현 알려줘','내 생활과 어떻게 연결하지?']}
+];
+let info = {}, drafts = {summary:'',opinion:'',lesson:''}, current = 'summary';
+const chatHist = {summary:[],opinion:[],lesson:[]};
+let teacherPw = '', lastSaved = '';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function run(action, ...args){
+  if (API_URL.includes('여기에_배포_ID')) throw new Error('index.html의 API_URL에 Apps Script 웹앱 주소를 넣어 주세요.');
+  let res;
+  try{
+    res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // CORS 사전요청 없이 보내기 위함
+      body: JSON.stringify({ action, args }),
+      redirect: 'follow'
+    });
+  }catch(e){ throw new Error('서버에 연결하지 못했어요. 인터넷 연결을 확인해 주세요.'); }
+  let out;
+  try{ out = await res.json(); }
+  catch(e){ throw new Error('서버 응답을 읽지 못했어요. (웹앱 액세스 권한이 "모든 사용자"인지 확인)'); }
+  if (!out.ok) throw new Error(out.error);
+  return out.data;
+}
+function toast(msg){
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => { t.style.opacity = 0; setTimeout(() => t.remove(), 300); }, 2200);
+}
+function errMsg(e){ return (e && e.message ? e.message : String(e)).replace(/^Error:\s*/, ''); }
+
+function countSentences(text){
+  const t = text.trim(); if (!t) return 0;
+  const parts = t.split(/(?<=[.!?。])\s+/).filter(s => s.trim());
+  return parts.length;
+}
+function localKey(){ return 'lfj_' + info.id + '_' + info.name; }
+function saveLocal(){ try{ localStorage.setItem(localKey(), JSON.stringify(drafts)); }catch(e){} }
+
+/* ---------- 시작 ---------- */
+$('btnStart').onclick = async () => {
+  info = { id:$('inId').value.trim(), name:$('inName').value.trim(), book:$('inBook').value.trim() };
+  if (!info.id || !info.name || !info.book) return toast('학번, 이름, 책 제목을 모두 써 주세요!');
+  $('btnStart').disabled = true; $('btnStart').textContent = '불러오는 중...';
+  try{
+    const r = await run('startSession', info);
+    drafts = r.drafts;
+    try{ // 서버보다 브라우저에 더 최근 글이 있으면 사용
+      const loc = JSON.parse(localStorage.getItem(localKey()) || 'null');
+      if (loc && (loc.summary+loc.opinion+loc.lesson).length > (drafts.summary+drafts.opinion+drafts.lesson).length) drafts = loc;
+    }catch(e){}
+    $('vStart').classList.add('hidden'); $('vMain').classList.remove('hidden');
+    $('who').textContent = `${info.id} ${info.name} · 『${info.book}』`;
+    buildStep1();
+    showStep(1);
+    if (r.returning) toast('이전에 쓰던 글을 불러왔어요 😊');
+  }catch(e){ toast(errMsg(e)); }
+  $('btnStart').disabled = false; $('btnStart').textContent = '시작하기 🚀';
+};
+
+function showStep(n){
+  ['step1','step2','step3'].forEach((id,i) => $(id).classList.toggle('hidden', i+1 !== n));
+  ['pill1','pill2','pill3'].forEach((id,i) => {
+    $(id).classList.toggle('on', i+1 === n); $(id).classList.toggle('done', i+1 < n);
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* ---------- STEP 1 ---------- */
+function secHtml(s, suffix){
+  return `<div class="sec s-${s.key}" id="sec_${s.key}${suffix}">
+    <div class="sec-head"><h3>${s.emoji} ${s.name}</h3><span class="badge" id="badge_${s.key}${suffix}">0 / ${s.n}문장</span></div>
+    <div class="tip">${s.tip}</div>
+    <textarea id="ta_${s.key}${suffix}" data-key="${s.key}" placeholder="${s.n}문장으로 써 보세요"></textarea>
+  </div>`;
+}
+function buildStep1(){
+  $('secs').innerHTML = SECTIONS.map(s => secHtml(s,'')).join('');
+  $('secs2').innerHTML = SECTIONS.map(s => secHtml(s,'2')).join('');
+  SECTIONS.forEach(s => {
+    ['', '2'].forEach(sfx => {
+      const ta = $('ta_' + s.key + sfx);
+      ta.value = drafts[s.key] || '';
+      ta.addEventListener('input', () => { drafts[s.key] = ta.value; updateBadge(s.key); saveLocal(); });
+      if (!sfx) ta.addEventListener('focus', () => setCurrent(s.key));
+    });
+    updateBadge(s.key);
+  });
+  setCurrent('summary');
+}
+function updateBadge(key){
+  const s = SECTIONS.find(x => x.key === key), c = countSentences(drafts[key] || '');
+  ['', '2'].forEach(sfx => {
+    const b = $('badge_' + key + sfx); if (!b) return;
+    b.textContent = `${c} / ${s.n}문장` + (c === s.n ? ' ✓' : '');
+    b.className = 'badge' + (c === s.n ? ' ok' : c > s.n ? ' over' : '');
+  });
+}
+function setCurrent(key){
+  current = key;
+  SECTIONS.forEach(s => $('sec_' + s.key).classList.toggle('active', s.key === key));
+  const s = SECTIONS.find(x => x.key === key);
+  $('chatFor').textContent = `지금 쓰는 부분: ${s.emoji} ${s.name} (${s.n}문장)`;
+  $('chips').innerHTML = s.chips.map(c => `<button class="chip">${esc(c)}</button>`).join('');
+  [...$('chips').children].forEach(ch => ch.onclick = () => sendChat(ch.textContent));
+  renderChat();
+}
+function renderChat(){
+  const h = chatHist[current];
+  const s = SECTIONS.find(x => x.key === current);
+  const hello = `안녕, ${info.name}! 나는 북버디야 📚\n『${info.book}』의 ‘${s.name}’을(를) 함께 생각해 보자. 문장을 대신 써 주지는 않지만, 아이디어와 표현은 도와줄게!`;
+  $('msgs').innerHTML = `<div class="msg bot">${esc(hello)}</div>` +
+    h.map(m => `<div class="msg ${m.role === 'user' ? 'me' : 'bot'}">${esc(m.text)}</div>`).join('');
+  $('msgs').scrollTop = $('msgs').scrollHeight;
+}
+async function sendChat(text){
+  text = (text || '').trim(); if (!text) return;
+  const key = current, hist = chatHist[key];
+  const prev = hist.slice();
+  hist.push({role:'user', text});
+  renderChat();
+  $('chatIn').value = ''; $('btnSend').disabled = true;
+  const w = document.createElement('div'); w.className = 'msg bot wait'; w.textContent = '북버디가 생각 중... 🤔';
+  $('msgs').appendChild(w); $('msgs').scrollTop = $('msgs').scrollHeight;
+  try{
+    const reply = await run('chatHelp', info, key, drafts[key], text, prev);
+    hist.push({role:'model', text: reply});
+  }catch(e){
+    hist.pop(); toast(errMsg(e));
+  }
+  $('btnSend').disabled = false;
+  if (current === key) renderChat();
+}
+$('btnSend').onclick = () => sendChat($('chatIn').value);
+$('chatIn').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing) sendChat($('chatIn').value); });
+
+async function saveServer(step, note, labelId){
+  try{
+    const t = await run('saveDraft', info, drafts, step, note);
+    if (labelId) $(labelId).textContent = '저장됨 ' + t.slice(11, 16);
+  }catch(e){ toast('저장 실패: ' + errMsg(e)); }
+}
+$('btnSave1').onclick = async () => { await saveServer('STEP1', '임시 저장', 'saved1'); toast('저장했어요 💾'); };
+
+$('btnTo2').onclick = async () => {
+  const miss = SECTIONS.filter(s => !drafts[s.key].trim());
+  if (miss.length) return toast(`‘${miss[0].name}’ 부분을 먼저 써 주세요!`);
+  const wrong = SECTIONS.filter(s => countSentences(drafts[s.key]) !== s.n);
+  if (wrong.length && !confirm(`문장 수가 맞지 않는 부분이 있어요: ${wrong.map(s => s.name).join(', ')}\n그래도 STEP 2로 갈까요?`)) return;
+  SECTIONS.forEach(s => $('ta_' + s.key + '2').value = drafts[s.key]);
+  showStep(2);
+  saveServer('STEP1', 'STEP1 완료(초안)', 'saved2');
+};
+
+/* ---------- STEP 2 ---------- */
+$('btnBack1').onclick = () => { SECTIONS.forEach(s => $('ta_' + s.key).value = drafts[s.key]); showStep(1); };
+
+$('btnCheck').onclick = async () => {
+  const btn = $('btnCheck'); btn.disabled = true; btn.textContent = '점검 중... ⏳';
+  $('gResult').innerHTML = '<div class="tip">북버디가 꼼꼼히 읽고 있어요...</div>';
+  try{
+    const r = await run('grammarCheck', info, drafts);
+    $('saved2').textContent = '점검 기록 저장됨';
+    let html = r.overall ? `<div class="overall">💬 ${esc(r.overall)}</div>` : '';
+    if (!r.items.length) html += `<div class="allgood">🌟 문법 오류를 찾지 못했어요! 완성 버튼을 눌러도 좋아요.</div>`;
+    r.items.forEach((it, i) => {
+      const s = SECTIONS.find(x => x.key === it.section);
+      html += `<div class="gitem">
+        <div class="where">${s ? s.emoji + ' ' + s.name : ''}</div>
+        <div><span class="orig">${esc(it.original)}</span></div>
+        <div>❗ ${esc(it.problem)}</div>
+        <div>💡 ${esc(it.hint)}</div>
+        <button class="btn ghost reveal" data-i="${i}">고친 표현 보기</button>
+        <div class="hidden" id="sug${i}">✅ <span class="sug">${esc(it.suggestion)}</span></div>
+      </div>`;
+    });
+    $('gResult').innerHTML = html;
+    $('gResult').querySelectorAll('.reveal').forEach(b => b.onclick = () => {
+      $('sug' + b.dataset.i).classList.remove('hidden'); b.remove();
+    });
+  }catch(e){
+    $('gResult').innerHTML = `<div class="tip">${esc(errMsg(e))}</div>`;
+  }
+  btn.disabled = false; btn.textContent = '🔍 문법 점검하기';
+};
+
+$('btnFinal').onclick = async () => {
+  if (!confirm('이대로 완성할까요? 완성한 글을 종이에 옮겨 쓰게 됩니다.')) return;
+  try{ await run('submitFinal', info, drafts); }catch(e){ return toast('저장 실패: ' + errMsg(e)); }
+  $('finalBox').innerHTML = `<div style="text-align:center;font-family:Jua;font-size:22px">『${esc(info.book)}』 독서 감상문</div>
+    <div style="text-align:center;color:var(--soft)">${esc(info.id)} ${esc(info.name)}</div>` +
+    SECTIONS.map(s => `<h3>${s.emoji} ${s.name}</h3><p>${esc(drafts[s.key])}</p>`).join('');
+  showStep(3);
+};
+$('btnBack2').onclick = () => showStep(2);
+
+/* ---------- 교사용 ---------- */
+$('lnkTeacher').onclick = async () => {
+  const pw = prompt('교사용 비밀번호를 입력하세요'); if (!pw) return;
+  teacherPw = pw;
+  try{ await loadTeacher(); }catch(e){ return toast(errMsg(e)); }
+  ['vStart','vMain'].forEach(id => $(id).classList.add('hidden'));
+  $('vTeacher').classList.remove('hidden');
+};
+$('btnReload').onclick = () => loadTeacher().catch(e => toast(errMsg(e)));
+$('btnTOut').onclick = () => location.reload();
+
+async function loadTeacher(){
+  const list = await run('teacherList', teacherPw);
+  list.sort((a,b) => String(a.id).localeCompare(String(b.id)));
+  $('tList').innerHTML = list.length ? `<table>
+    <tr><th>학번</th><th>이름</th><th>책 제목</th><th>챗봇 질문</th><th>문법 점검</th><th>상태</th><th>최종 수정</th></tr>
+    ${list.map((r,i) => `<tr class="row" data-i="${i}"><td>${esc(r.id)}</td><td>${esc(r.name)}</td><td>${esc(r.book)}</td>
+      <td>${esc(r.chats)}</td><td>${esc(r.grammars)}</td><td>${esc(r.status)}</td><td>${esc(r.updated)}</td></tr>`).join('')}
+  </table><div class="tip">학생 이름을 누르면 작성 과정이 시간순으로 보여요.</div>` : '<div class="tip">아직 기록이 없어요.</div>';
+  $('tList').querySelectorAll('tr.row').forEach(tr => tr.onclick = () => showDetail(list[tr.dataset.i]));
+}
+async function showDetail(st){
+  $('tDetail').innerHTML = '<div class="tip">불러오는 중...</div>';
+  try{
+    const logs = await run('teacherDetail', teacherPw, st.id, st.name);
+    $('tDetail').innerHTML = `<h3>📋 ${esc(st.id)} ${esc(st.name)} · 『${esc(st.book)}』</h3>
+      <div class="card" style="background:#fff;margin-bottom:12px">
+        ${SECTIONS.map(s => `<b>${s.emoji} ${s.name}</b> (${countSentences(st[s.key] || '')}/${s.n}문장)<p style="margin:2px 0 10px">${esc(st[s.key]) || '-'}</p>`).join('')}
+      </div>
+      ${logs.map(l => `<div class="tl"><span class="k">${esc(l.type)}</span><span class="t">${esc(l.time)} · ${esc(l.step)} ${esc(l.section)}</span>
+        ${l.input ? `<pre>${esc(l.input)}</pre>` : ''}${l.output ? `<pre class="ai">🤖 ${esc(l.output)}</pre>` : ''}</div>`).join('')}`;
+    $('tDetail').scrollIntoView({behavior:'smooth'});
+  }catch(e){ $('tDetail').innerHTML = `<div class="tip">${esc(errMsg(e))}</div>`; }
+}
+</script>
+</body>
+</html>
